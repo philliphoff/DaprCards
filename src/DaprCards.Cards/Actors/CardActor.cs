@@ -6,21 +6,21 @@ namespace DaprCards.Cards.Actors
 {
     internal sealed class CardActor : Actor, ICardActor
     {
-        private const string CardStateName = "card";
+        private const string DetailsStateName = "details";
 
         public CardActor(ActorService actorService, ActorId actorId)
             : base(actorService, actorId)
         {
         }
 
-        public Task<Card> GetDetailsAsync()
+        public Task<CardDetails> GetDetailsAsync()
         {
-            return this.StateManager.GetStateAsync<Card>(CardStateName);
+            return this.StateManager.GetStateAsync<CardDetails>(DetailsStateName);
         }
 
-        public Task SetDetailsAsync(Card card)
+        public Task SetDetailsAsync(CardDetails details)
         {
-            return this.StateManager.SetStateAsync(CardStateName, card);
+            return this.StateManager.SetStateAsync(DetailsStateName, details);
         }
     }
 }

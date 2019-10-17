@@ -5,8 +5,8 @@ namespace DaprCards.Cards
 {
     public interface ICardActor : IActor
     {
-        Task<Card> GetDetailsAsync();
+        Task<CardDetails> GetDetailsAsync();
 
-        Task SetDetailsAsync(Card card);
+        Task SetDetailsAsync(CardDetails details);
     }
 }

@@ -25,6 +25,25 @@
             }
         },
         {
+            "name": "Launch UserManager (Test)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "dotnet",
+            "args": ["${workspaceFolder}/src/DaprCards.Cards/bin/Debug/netcoreapp3.0/DaprCards.Cards.dll"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "pipeTransport": {
+                "pipeCwd": "${workspaceFolder}",
+                "pipeProgram": "dapr",
+                "pipeArgs": ["run", "--app-id", "dapr-cards", "--app-port", "5005"],
+                "debuggerPath": "~/.vsdbg/linux-x64/latest/vsdbg"
+            }
+        },
+        {
             "name": "Launch UserManager",
             "type": "coreclr",
             "request": "launch",
@@ -35,7 +54,7 @@
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "DAPR_HTTP_PORT": "55900"
+                "DAPR_HTTP_PORT": "52974"
             }
         },
         {

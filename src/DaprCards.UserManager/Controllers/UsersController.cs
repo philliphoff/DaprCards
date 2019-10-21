@@ -1,4 +1,5 @@
 using DaprCards.Users;
+using Dapr;
 using Dapr.Actors;
 using Dapr.Actors.Client;
 using System;
@@ -22,15 +23,14 @@ namespace DaprCards.UserManager.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> GetAsync([FromServices] StateClient state)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => index.ToString())
-            .ToArray();
+            var users = await state.GetStateAsync<HashSet<string>>("users");
+
+            return users ?? Enumerable.Empty<string>();
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public Task<UserDetails> GetUserAsync(string id)
         {
             string actorType = "UserActor";
@@ -41,16 +41,23 @@ namespace DaprCards.UserManager.Controllers
             return actorProxy.GetDetailsAsync();
         }
 
-        [HttpPut]
-        [Route("{id}")]
-        public Task SetUserAsync(string id, [FromBody] UserDetails details)
+        [HttpPut("{id}")]
+        public async Task SetUserAsync(string id, [FromBody] UserDetails details, [FromServices] StateClient state)
         {
             string actorType = "UserActor";
             var actorId = new ActorId(id);
 
             var actorProxy = ActorProxy.Create<IUserActor>(actorId, actorType);
 
-            return actorProxy.SetDetailsAsync(details);
+            await actorProxy.SetDetailsAsync(details);
+
+            var users = await state.GetStateAsync<HashSet<string>>("users");
+
+            users ??= new HashSet<string>();
+
+            users.Add(id);
+
+            await state.SaveStateAsync("users", users);
         }
     }
 }

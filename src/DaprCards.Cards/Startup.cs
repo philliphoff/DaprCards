@@ -119,7 +119,7 @@ namespace DaprCards.Cards
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IStartupFilter>(new LoggingStartupFilter());
+            //services.AddSingleton<IStartupFilter>(new LoggingStartupFilter());
             services.AddRouting();
         }
 

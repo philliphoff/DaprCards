@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DaprCards.Common\DaprCards.Common.csproj" />
+    <ProjectReference Include="../../../../Microsoft/dapr/dotnet-sdk/src/Dapr.Actors/Dapr.Actors.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Dapr.Actors" Version="0.1.0-preview02" /> -->
+  </ItemGroup>
+
+</Project>

@@ -2,13 +2,13 @@ using System.Runtime.Serialization;
 
 namespace DaprCards.Cards
 {
-    [DataContract]
+    //[DataContract]
     public sealed class CardDetails
     {
-        [DataMember(Name = "userId")]
-        public int UserId { get; set; }
+        //[DataMember(Name = "userId")]
+        public string? UserId { get; set; }
 
-        [DataMember(Name = "value")]
+        //[DataMember(Name = "value")]
         public int Value { get; set; }
     }
 }

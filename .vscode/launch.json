@@ -25,22 +25,60 @@
             }
         },
         {
-            "name": "Launch UserManager (Test)",
+            "name": "Console",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "dotnet",
-            "args": ["${workspaceFolder}/src/DaprCards.Cards/bin/Debug/netcoreapp3.0/DaprCards.Cards.dll"],
+            "program": "${workspaceFolder}/src/DaprCards.Console/bin/Debug/netcoreapp3.0/DaprCards.Console.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false,
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DAPR_HTTP_PORT": "64551"
+            }
+        },
+        {
+            "name": "Cards",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Cards: Build",
+            "program": "${workspaceFolder}/src/DaprCards.Cards/bin/Debug/netcoreapp3.0/DaprCards.Cards.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false,
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DAPR_HTTP_PORT": "45000"
+            }
+        },
+        {
+            "name": "CardManager",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "CardManager: Build",
+            "program": "${workspaceFolder}/src/DaprCards.CardManager/bin/Debug/netcoreapp3.0/DaprCards.CardManager.dll",
+            "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "pipeTransport": {
-                "pipeCwd": "${workspaceFolder}",
-                "pipeProgram": "dapr",
-                "pipeArgs": ["run", "--app-id", "dapr-cards", "--app-port", "5005"],
-                "debuggerPath": "~/.vsdbg/linux-x64/latest/vsdbg"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DAPR_HTTP_PORT": "45005"
+            }
+        },
+        {
+            "name": "DeckManager",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "DeckManager: Build",
+            "program": "${workspaceFolder}/src/DaprCards.DeckManager/bin/Debug/netcoreapp3.0/DaprCards.DeckManager.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DAPR_HTTP_PORT": "45001"
             }
         },
         {
@@ -56,12 +94,6 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "DAPR_HTTP_PORT": "52974"
             }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
         }
     ]
 }

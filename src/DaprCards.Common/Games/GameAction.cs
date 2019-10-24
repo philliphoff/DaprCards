@@ -7,7 +7,7 @@ namespace DaprCards.Games
     public sealed class GameAction
     {
         [DataMember(Name = "description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [DataMember(Name = "timestamp")]
         public DateTimeOffset Timestamp { get; set; }

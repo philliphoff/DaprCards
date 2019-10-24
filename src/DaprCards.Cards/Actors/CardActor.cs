@@ -18,9 +18,11 @@ namespace DaprCards.Cards.Actors
             return this.StateManager.GetStateAsync<CardDetails>(DetailsStateName);
         }
 
-        public Task SetDetailsAsync(CardDetails details)
+        public async Task<bool> SetDetailsAsync(CardDetails details)
         {
-            return this.StateManager.SetStateAsync(DetailsStateName, details);
+            await this.StateManager.SetStateAsync(DetailsStateName, details);
+
+            return true;
         }
     }
 }

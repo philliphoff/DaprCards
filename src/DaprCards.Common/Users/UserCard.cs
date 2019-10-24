@@ -6,6 +6,6 @@ namespace DaprCards.Users
     public sealed class UserCard
     {
         [DataMember(Name = "cardId")]
-        public string CardId { get; set; }
+        public string? CardId { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapr.Actors.AspNetCore;
 using DaprCards.Cards.Actors;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +24,19 @@ namespace DaprCards.Cards
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
+                        .Configure(
+                            app =>
+                            {
+                                app.Use(
+                                    (context, next) =>
+                                    {
+                                        //Do some work here
+                                        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                                        //Pass the request on down to the next pipeline (Which is the MVC middleware)
+                                        return next();
+                                    });
+                            }
+                        )
                         .UseStartup<Startup>()
                         .UseActors(
                             runtime =>

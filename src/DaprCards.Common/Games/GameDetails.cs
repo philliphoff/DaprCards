@@ -6,9 +6,9 @@ namespace DaprCards.Games
     public sealed class GameDetails
     {
         [DataMember(Name = "history")]
-        public GameAction[] History { get; set; }
+        public GameAction[]? History { get; set; }
 
         [DataMember(Name = "players")]
-        public GamePlayer[] Players { get; set; }
+        public GamePlayer[]? Players { get; set; }
     }
 }

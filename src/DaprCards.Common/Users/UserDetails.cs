@@ -6,12 +6,12 @@ namespace DaprCards.Users
     public sealed class UserDetails
     {
         [DataMember(Name = "cards")]
-        public UserCard[] Cards { get; set; }
+        public UserCard[]? Cards { get; set; }
 
         [DataMember(Name = "decks")]
-        public UserDeck[] Decks { get; set; }
+        public UserDeck[]? Decks { get; set; }
 
         [DataMember(Name = "name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

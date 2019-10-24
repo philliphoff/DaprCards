@@ -6,9 +6,9 @@ namespace DaprCards.Games
     public sealed class GameCard
     {
         [DataMember(Name = "cardId")]
-        public string CardId { get; set; }
+        public string? CardId { get; set; }
 
         [DataMember(Name = "isPlayed")]
-        public string IsPlayed { get; set; }
+        public bool IsPlayed { get; set; }
     }
 }

@@ -1,17 +1,18 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace DaprCards.Decks
 {
     [DataContract]
-    public sealed class DeckDetails
+    public sealed class CreateRandomDeckOptions
     {
-        [DataMember(Name = "cards")]
-        public DeckCard[]? Cards { get; set; }
+        [DataMember(Name = "count")]
+        public int? Count { get; set; }
 
         [DataMember(Name = "name")]
         public string? Name { get; set; }
 
         [DataMember(Name = "userId")]
-        public string? UserId { get; set; }
+        public string? UserId { get; }
     }
 }

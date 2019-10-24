@@ -2,41 +2,215 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "Cards: Build",
             "command": "dotnet",
             "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Cards"
+            },
             "args": [
-                "build",
-                "${workspaceFolder}/src/DaprCards.Cards/DaprCards.Cards.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "build"
             ],
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish",
-            "command": "dotnet",
+            "label": "Cards: Dapr",
+            "command": "daprd",
             "type": "process",
             "args": [
-                "publish",
-                "${workspaceFolder}/src/DaprCards.Cards/DaprCards.Cards.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "--dapr-id", "dapr-cards",
+                "--app-port", "5000",
+                "--dapr-http-port", "45000",
+                "--dapr-grpc-port", "46000",
+                "--placement-address", "localhost:50005",
+                "--log-level", "debug"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": []
         },
         {
-            "label": "watch",
-            "command": "dotnet",
+            "label": "Cards: Launch",
+            "command": "dapr",
             "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Cards"
+            },
             "args": [
-                "watch",
                 "run",
-                "${workspaceFolder}/src/DaprCards.Cards/DaprCards.Cards.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "--app-id", "dapr-cards",
+                "--app-port", "5000",
+                "dotnet", "run"
+            ],
+            "dependsOn": "Cards: Build",
+            "problemMatcher": []
+        },
+        {
+            "label": "CardManager: Build",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.CardManager"
+            },
+            "args": [
+                "build"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "CardManager: Dapr",
+            "command": "daprd",
+            "type": "process",
+            "args": [
+                "--dapr-id", "dapr-cards-manager",
+                "--app-port", "5005",
+                "--dapr-http-port", "45005",
+                "--dapr-grpc-port", "46005",
+                "--placement-address", "localhost:50005"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CardManager: Launch",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.CardManager"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-card-manager",
+                "--app-port", "5005",
+                "dotnet", "run"
+            ],
+            "dependsOn": "CardManager: Build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Decks: Build",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Decks"
+            },
+            "args": [
+                "build"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Decks: Launch",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Decks"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-decks",
+                "--app-port", "5001",
+                "dotnet", "run"
+            ],
+            "dependsOn": "Decks: Build",
+            "problemMatcher": []
+        },
+        {
+            "label": "DeckManager: Build",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.DeckManager"
+            },
+            "args": [
+                "build"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "DeckManager: Dapr",
+            "command": "daprd",
+            "type": "process",
+            "args": [
+                "--dapr-id", "dapr-deck-manager",
+                "--app-port", "5006",
+                "--dapr-http-port", "45001",
+                "--dapr-grpc-port", "46001",
+                "--placement-address", "localhost:50005"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "DeckManager: Launch",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.DeckManager"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-deck-manager",
+                "--app-port", "5006",
+                "dotnet", "run"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Launch Games",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Games"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-games",
+                "--app-port", "5003",
+                "dotnet", "run"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Launch GameManager",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.GameManager"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-game-manager",
+                "--app-port", "5007",
+                "dotnet", "run"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Launch Users",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Users"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-users",
+                "--app-port", "5002",
+                "dotnet", "run"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Launch UserManager",
+            "command": "dapr",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.UserManager"
+            },
+            "args": [
+                "run",
+                "--app-id", "dapr-user-manager",
+                "--app-port", "5004",
+                "dotnet", "run"
+            ],
+            "problemMatcher": []
         }
     ]
 }

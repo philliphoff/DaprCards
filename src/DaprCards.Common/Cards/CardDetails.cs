@@ -6,7 +6,7 @@ namespace DaprCards.Cards
     public sealed class CardDetails
     {
         //[DataMember(Name = "userId")]
-        public string? UserId { get; set; }
+        public string UserId { get; set; }
 
         //[DataMember(Name = "value")]
         public int Value { get; set; }

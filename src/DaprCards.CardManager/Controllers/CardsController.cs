@@ -47,9 +47,15 @@ namespace DaprCards.CardManager.Controllers
             string actorType = "CardActor";
             var actorId = new ActorId(id);
 
+            /*
             var actorProxy = ActorProxy.Create<ICardActor>(actorId, actorType);
 
             await actorProxy.SetDetailsAsync(details);
+            */
+
+            var actorProxy = ActorProxy.Create(actorId, actorType);
+
+            await actorProxy.InvokeAsync("SetDetailsAsync", details);
 
             var cards = await state.GetStateAsync<HashSet<string>>("cards");
 

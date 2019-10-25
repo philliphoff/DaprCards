@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
+using System.IO;
 
 namespace DaprCards.DeckManager.Controllers
 {
@@ -39,16 +40,13 @@ namespace DaprCards.DeckManager.Controllers
         [HttpGet("{id}")]
         public Task<DeckDetails> GetDeckAsync(string id)
         {
-            string actorType = "DeckActor";
-            var actorId = new ActorId(id);
+            var deck = DeckActorProxy.CreateProxy(id);
 
-            var actorProxy = ActorProxy.Create<IDeckActor>(actorId, actorType);
-
-            return actorProxy.GetDetailsAsync();
+            return deck.GetDetailsAsync();
         }
 
         [HttpPost("createRandomDeck")]
-        public async Task<DeckDetails> CreateRandomDeckAsync([FromBody] CreateRandomDeckOptions options, [FromServices] StateClient state)
+        public async Task<string> CreateRandomDeckAsync([FromBody] CreateRandomDeckOptions options, [FromServices] StateClient state)
         {
             string id = Guid.NewGuid().ToString();
 
@@ -63,54 +61,34 @@ namespace DaprCards.DeckManager.Controllers
             // TODO: Choose an appropriate seed.
             var random = new Random();
 
+            using var cardManager = CardManagerProxy.CreateProxy();
+
             for (int i = 0; i < count; i++)
             {
                 // TODO: Card manager should manage generation of IDs.
                 int cardValue = random.Next(1, 100 + 1);
 
-                string daprPort = Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500";
-                string daprUrl = $"http://localhost:{daprPort}/v1.0";
-                string cardUrl = $"{daprUrl}/invoke/{Constants.AppIds.CardManager}/method/cards";
+                string cardId = await cardManager.CreateCardAsync(
+                    new CardDetails
+                    {
+                        UserId = options.UserId,
+                        Value = cardValue
+                    });
 
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-
-                    var response = await client.PostAsync(
-                        cardUrl,
-                        new StringContent(
-                            JsonSerializer.Serialize(
-                                new CardDetails
-                                {
-                                    UserId = options.UserId,
-                                    Value = cardValue
-                                }),
-                            Encoding.UTF8,
-                            MediaTypeNames.Application.Json));
-
-                    response.EnsureSuccessStatusCode();
-
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    string cardId = JsonSerializer.Deserialize<string>(responseBody);
-
-                    details.Cards[i] = new DeckCard{ CardId = cardId };
-                }
+                details.Cards[i] = new DeckCard{ CardId = cardId };
             }
 
             await this.SetDeckAsync(id, details, state);
 
-            return details;
+            return id;
         }
 
         [HttpPut("{id}")]
         public async Task SetDeckAsync(string id, [FromBody] DeckDetails details, [FromServices] StateClient state)
         {
-            string actorType = "DeckActor";
-            var actorId = new ActorId(id);
+            var deck = DeckActorProxy.CreateProxy(id);
 
-            var actorProxy = ActorProxy.Create<IDeckActor>(actorId, actorType);
-
-            await actorProxy.SetDetailsAsync(details);
+            await deck.SetDetailsAsync(details);
 
             var decks = await state.GetStateAsync<HashSet<string>>("decks");
 

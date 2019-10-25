@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace DaprCards.Decks
 {
@@ -13,6 +14,6 @@ namespace DaprCards.Decks
         public string? Name { get; set; }
 
         [DataMember(Name = "userId", IsRequired = true)]
-        public string? UserId { get; }
+        public string? UserId { get; set; }
     }
 }

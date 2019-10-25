@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Net.Http.Headers;
 
 namespace DaprCards.DeckManager.Controllers
 {
@@ -65,30 +66,35 @@ namespace DaprCards.DeckManager.Controllers
             for (int i = 0; i < count; i++)
             {
                 // TODO: Card manager should manage generation of IDs.
-                string cardId = Guid.NewGuid().ToString();
                 int cardValue = random.Next(1, 100 + 1);
 
                 string daprPort = Environment.GetEnvironmentVariable("DAPR_HTTP_PORT") ?? "3500";
                 string daprUrl = $"http://localhost:{daprPort}/v1.0";
-                string cardUrl = $"{daprUrl}/invoke/{Constants.AppIds.CardManager}/method/cards/{cardId}";
+                string cardUrl = $"{daprUrl}/invoke/{Constants.AppIds.CardManager}/method/cards";
 
                 using (var client = new HttpClient())
                 {
-                    var response = await client.PutAsync(
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
+
+                    var response = await client.PostAsync(
                         cardUrl,
                         new StringContent(
                             JsonSerializer.Serialize(
                                 new CardDetails
                                 {
+                                    UserId = options.UserId,
                                     Value = cardValue
                                 }),
                             Encoding.UTF8,
                             MediaTypeNames.Application.Json));
 
                     response.EnsureSuccessStatusCode();
-                }
 
-                details.Cards[i] = new DeckCard{ CardId = cardId };
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    string cardId = JsonSerializer.Deserialize<string>(responseBody);
+
+                    details.Cards[i] = new DeckCard{ CardId = cardId };
+                }
             }
 
             await this.SetDeckAsync(id, details, state);

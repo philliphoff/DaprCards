@@ -30,6 +30,16 @@ namespace DaprCards.CardManager.Controllers
             return Cards ?? Enumerable.Empty<string>();
         }
 
+        [HttpPost]
+        public async Task<string> CreateCardAsync([FromBody] CardDetails details, [FromServices] StateClient state)
+        {
+            string id = Guid.NewGuid().ToString();
+
+            await this.SetCardAsync(id, details, state);
+
+            return id;
+        }
+
         [HttpGet("{id}")]
         public Task<CardDetails> GetCardAsync(string id)
         {

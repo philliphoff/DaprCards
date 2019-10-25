@@ -131,8 +131,8 @@
             "args": [
                 "--dapr-id", "dapr-deck-manager",
                 "--app-port", "5006",
-                "--dapr-http-port", "45001",
-                "--dapr-grpc-port", "46001",
+                "--dapr-http-port", "45006",
+                "--dapr-grpc-port", "46006",
                 "--placement-address", "localhost:50005"
             ],
             "problemMatcher": []
@@ -153,7 +153,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Launch Games",
+            "label": "Games: Launch",
             "command": "dapr",
             "type": "process",
             "options": {
@@ -168,7 +168,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Launch GameManager",
+            "label": "GameManager: Launch",
             "command": "dapr",
             "type": "process",
             "options": {
@@ -183,7 +183,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Launch Users",
+            "label": "Users: Launch",
             "command": "dapr",
             "type": "process",
             "options": {
@@ -198,7 +198,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Launch UserManager",
+            "label": "UserManager: Launch",
             "command": "dapr",
             "type": "process",
             "options": {

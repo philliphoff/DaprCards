@@ -12,7 +12,7 @@ namespace DaprCards.Decks
         [DataMember(Name = "name")]
         public string? Name { get; set; }
 
-        [DataMember(Name = "userId")]
+        [DataMember(Name = "userId", IsRequired = true)]
         public string? UserId { get; }
     }
 }

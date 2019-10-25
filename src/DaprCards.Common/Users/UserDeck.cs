@@ -5,7 +5,7 @@ namespace DaprCards.Users
     [DataContract]
     public sealed class UserDeck
     {
-        [DataMember(Name = "deckId")]
+        [DataMember(Name = "deckId", IsRequired = true)]
         public string? DeckId { get; set; }
     }
 }

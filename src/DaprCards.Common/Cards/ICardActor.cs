@@ -7,6 +7,6 @@ namespace DaprCards.Cards
     {
         Task<CardDetails> GetDetailsAsync();
 
-        Task<bool> SetDetailsAsync(CardDetails details);
+        Task SetDetailsAsync(CardDetails details);
     }
 }

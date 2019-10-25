@@ -26,9 +26,9 @@ namespace DaprCards.Cards
             return proxy.InvokeAsync<CardDetails>(nameof(ICardActor.GetDetailsAsync));
         }
 
-        public Task<bool> SetDetailsAsync(CardDetails details)
+        public Task SetDetailsAsync(CardDetails details)
         {
-            return proxy.InvokeAsync<bool>(nameof(ICardActor.SetDetailsAsync), details);
+            return proxy.InvokeAsync(nameof(ICardActor.SetDetailsAsync), details);
         }
 
         #endregion

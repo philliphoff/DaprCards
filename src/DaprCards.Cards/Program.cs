@@ -24,19 +24,6 @@ namespace DaprCards.Cards
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
-                        .Configure(
-                            app =>
-                            {
-                                app.Use(
-                                    (context, next) =>
-                                    {
-                                        //Do some work here
-                                        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                                        //Pass the request on down to the next pipeline (Which is the MVC middleware)
-                                        return next();
-                                    });
-                            }
-                        )
                         .UseStartup<Startup>()
                         .UseActors(
                             runtime =>

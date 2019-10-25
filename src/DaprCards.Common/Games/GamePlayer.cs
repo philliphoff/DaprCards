@@ -8,7 +8,7 @@ namespace DaprCards.Games
         [DataMember(Name = "cards")]
         public GameCard[]? Cards { get; set; }
 
-        [DataMember(Name = "userId")]
+        [DataMember(Name = "userId", IsRequired = true)]
         public string? UserId { get; set; }
     }
 }

@@ -5,7 +5,7 @@ namespace DaprCards.Games
     [DataContract]
     public sealed class GameCard
     {
-        [DataMember(Name = "cardId")]
+        [DataMember(Name = "cardId", IsRequired = true)]
         public string? CardId { get; set; }
 
         [DataMember(Name = "isPlayed")]

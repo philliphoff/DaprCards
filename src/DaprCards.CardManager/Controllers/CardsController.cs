@@ -44,18 +44,9 @@ namespace DaprCards.CardManager.Controllers
         [HttpPut("{id}")]
         public async Task SetCardAsync(string id, [FromBody] CardDetails details, [FromServices] StateClient state)
         {
-            string actorType = "CardActor";
-            var actorId = new ActorId(id);
+            var proxy = CardActorProxy.CreateProxy(id);
 
-            /*
-            var actorProxy = ActorProxy.Create<ICardActor>(actorId, actorType);
-
-            await actorProxy.SetDetailsAsync(details);
-            */
-
-            var actorProxy = ActorProxy.Create(actorId, actorType);
-
-            await actorProxy.InvokeAsync("SetDetailsAsync", details);
+            await proxy.SetDetailsAsync(details);
 
             var cards = await state.GetStateAsync<HashSet<string>>("cards");
 

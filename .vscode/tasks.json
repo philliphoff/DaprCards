@@ -60,7 +60,7 @@
             "command": "daprd",
             "type": "process",
             "args": [
-                "--dapr-id", "dapr-cards-manager",
+                "--dapr-id", "dapr-card-manager",
                 "--app-port", "5005",
                 "--dapr-http-port", "45005",
                 "--dapr-grpc-port", "46005",

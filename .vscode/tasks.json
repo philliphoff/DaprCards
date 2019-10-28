@@ -85,6 +85,18 @@
             "problemMatcher": []
         },
         {
+            "label": "Common: Build",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/DaprCards.Common"
+            },
+            "args": [
+                "build"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Decks: Build",
             "command": "dotnet",
             "type": "process",
@@ -210,6 +222,17 @@
                 "--app-port", "5004",
                 "dotnet", "run"
             ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Base Services: Base",
+            "dependsOn": ["Cards: Launch", "Decks: Launch", "Users: Launch"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Base Services: Launch",
+            "dependsOn": ["Common: Build", "Base Services: Base"],
+            "dependsOrder": "sequence",
             "problemMatcher": []
         }
     ]

@@ -21,6 +21,16 @@ namespace DaprCards.Users
 
         #region IUserActor Members
 
+        public Task AddCardAsync(string cardId)
+        {
+            return proxy.InvokeAsync(nameof(IUserActor.AddCardAsync), cardId);
+        }
+
+        public Task AddDeckAsync(string deckId)
+        {
+            return proxy.InvokeAsync(nameof(IUserActor.AddDeckAsync), deckId);
+        }
+
         public Task<UserDetails> GetDetailsAsync()
         {
             return proxy.InvokeAsync<UserDetails>(nameof(IUserActor.GetDetailsAsync));

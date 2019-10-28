@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.IO;
+using DaprCards.Users;
 
 namespace DaprCards.DeckManager.Controllers
 {
@@ -48,6 +49,11 @@ namespace DaprCards.DeckManager.Controllers
         [HttpPost("createRandomDeck")]
         public async Task<string> CreateRandomDeckAsync([FromBody] CreateRandomDeckOptions options, [FromServices] StateClient state)
         {
+            if (options.UserId == null)
+            {
+                throw new ArgumentException("UserId should be non-null.", nameof(options));
+            }
+
             string id = Guid.NewGuid().ToString();
 
             int count = options.Count ?? 10;
@@ -79,6 +85,10 @@ namespace DaprCards.DeckManager.Controllers
             }
 
             await this.SetDeckAsync(id, details, state);
+
+            var user = UserActorProxy.CreateProxy(details.UserId);
+
+            await user.AddDeckAsync(id);
 
             return id;
         }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using DaprCards.Users;
 
 namespace DaprCards.CardManager.Controllers
 {
@@ -36,6 +37,10 @@ namespace DaprCards.CardManager.Controllers
             string id = Guid.NewGuid().ToString();
 
             await this.SetCardAsync(id, details, state);
+
+            var user = UserActorProxy.CreateProxy(details.UserId);
+
+            await user.AddCardAsync(id);
 
             return id;
         }

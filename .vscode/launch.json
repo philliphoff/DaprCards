@@ -74,6 +74,15 @@
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "DAPR_HTTP_PORT": "52974"
             }
+        },
+        {
+            "name": "Web",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "dapr",
+            "runtimeArgs": ["run", "--app-id", "dapr-web", "--", "yarn", "debug"],
+            "cwd": "${workspaceFolder}/src/dapr-cards-web",
+            "port": 9229
         }
     ]
 }

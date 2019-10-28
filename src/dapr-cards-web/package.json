@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "debug": "NODE_OPTIONS=--inspect next dev",
     "build": "next build",
     "start": "next start"
   },
@@ -14,10 +15,13 @@
     "next": "9.1.1",
     "prop-types": "^15.7.2",
     "react": "16.11.0",
-    "react-dom": "16.11.0"
+    "react-dom": "16.11.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^12.11.7",
+    "@types/request-promise-native": "^1.0.17",
     "typescript": "^3.6.4"
   }
 }

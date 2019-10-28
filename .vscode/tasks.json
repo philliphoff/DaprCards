@@ -225,13 +225,22 @@
             "problemMatcher": []
         },
         {
-            "label": "Base Services: Base",
-            "dependsOn": ["Cards: Launch", "Decks: Launch", "Users: Launch"],
+            "label": "Services: Base",
+            "dependsOn": [
+                "CardManager: Launch",
+                "Cards: Launch",
+                "DeckManager: Launch",
+                "Decks: Launch",
+                "GameManager: Launch",
+                "Games: Launch",
+                "UserManager: Launch",
+                "Users: Launch"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "Base Services: Launch",
-            "dependsOn": ["Common: Build", "Base Services: Base"],
+            "label": "Services: Launch",
+            "dependsOn": ["Common: Build", "Services: Base"],
             "dependsOrder": "sequence",
             "problemMatcher": []
         }

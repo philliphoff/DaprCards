@@ -30,6 +30,30 @@ namespace DaprCards.UserManager.Controllers
             return users ?? Enumerable.Empty<string>();
         }
 
+        [HttpPost]
+        public async Task<string> CreateUserAsync(CreateUserOptions options, [FromServices] StateClient state)
+        {
+            string id = Guid.NewGuid().ToString();
+
+            var user = UserActorProxy.CreateProxy(id);
+
+            await user.SetDetailsAsync(
+                new UserDetails
+                {
+                    Name = options.Name
+                });
+
+            var users = await state.GetStateAsync<HashSet<string>>("users");
+
+            users ??= new HashSet<string>();
+
+            users.Add(id);
+
+            await state.SaveStateAsync("users", users);
+
+            return id;
+        }
+
         [HttpGet("{id}")]
         public Task<UserDetails> GetUserAsync(string id)
         {
@@ -39,25 +63,6 @@ namespace DaprCards.UserManager.Controllers
             var actorProxy = ActorProxy.Create<IUserActor>(actorId, actorType);
 
             return actorProxy.GetDetailsAsync();
-        }
-
-        [HttpPut("{id}")]
-        public async Task SetUserAsync(string id, [FromBody] UserDetails details, [FromServices] StateClient state)
-        {
-            string actorType = "UserActor";
-            var actorId = new ActorId(id);
-
-            var actorProxy = ActorProxy.Create<IUserActor>(actorId, actorType);
-
-            await actorProxy.SetDetailsAsync(details);
-
-            var users = await state.GetStateAsync<HashSet<string>>("users");
-
-            users ??= new HashSet<string>();
-
-            users.Add(id);
-
-            await state.SaveStateAsync("users", users);
         }
     }
 }

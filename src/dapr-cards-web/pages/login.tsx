@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { DaprAppBar } from '../components/daprAppBar';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -28,6 +29,7 @@ const Login = (props) => {
             <Head>
                 <title>Login</title>
             </Head>
+            <DaprAppBar enableLogIn={false} />
             <Grid container className={classes.grid} justify="center" spacing={2}>
                 <Grid item>
                     <Paper className={classes.paper}>

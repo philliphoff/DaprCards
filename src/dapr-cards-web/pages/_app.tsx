@@ -49,17 +49,19 @@ export default class MyApp extends App<{}, {}, { userId?: string }> {
     );
   }
 
-  private logInStart() {
+  private readonly logInStart = () => {
     Router.push('/login');
   }
 
-  private logInEnd(userId: string) {
+  private readonly logInEnd = (userId: string) => {
     this.setState({
       userId
     });
+
+    Router.back();
   }
 
-  private logOut() {
+  private readonly logOut = () => {
     this.setState({
       userId: undefined
     });

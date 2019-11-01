@@ -2,3 +2,4 @@
 components/
 bin/
 obj/
+node_modules/

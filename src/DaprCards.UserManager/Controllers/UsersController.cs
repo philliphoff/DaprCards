@@ -40,18 +40,38 @@ namespace DaprCards.UserManager.Controllers
             await user.SetDetailsAsync(
                 new UserDetails
                 {
+                    Email = options.Email,
                     Name = options.Name
                 });
 
             var users = await state.GetStateAsync<HashSet<string>>("users");
+            var emails = await state.GetStateAsync<Dictionary<string, string>>("emails");
 
             users ??= new HashSet<string>();
+            emails ??= new Dictionary<string, string>();
 
             users.Add(id);
+            emails[options.Email] = id;
 
             await state.SaveStateAsync("users", users);
+            await state.SaveStateAsync("emails", emails);
 
             return id;
+        }
+
+        [HttpPost("signin")]
+        public async Task<ActionResult<string>> SignInUserAsync([FromBody] string email, [FromServices] StateClient state)
+        {
+            var emails = await state.GetStateAsync<Dictionary<string, string>>("emails");
+
+            if (emails != null && emails.TryGetValue(email, out string userId))
+            {
+                return userId;
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpGet("{id}")]

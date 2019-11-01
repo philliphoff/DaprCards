@@ -11,6 +11,9 @@ namespace DaprCards.Users
         [DataMember(Name = "decks")]
         public UserDeck[]? Decks { get; set; }
 
+        [DataMember(Name = "email")]
+        public string? Email { get; set; }
+
         [DataMember(Name = "name")]
         public string? Name { get; set; }
     }

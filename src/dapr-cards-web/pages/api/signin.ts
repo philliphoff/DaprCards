@@ -5,7 +5,7 @@ const daprPort = process.env.DAPR_HTTP_PORT || 3500;
 const daprUrl = `http://localhost:${daprPort}/v1.0/invoke`;
 
 const daprInvocationUrl = (appId: string, methodName: string) => `${daprUrl}/${appId}/method/${methodName}`;
-const getUsersUrl = () => daprInvocationUrl('dapr-user-manager', 'users');
+const getUsersUrl = () => daprInvocationUrl('dapr-user-manager', 'users/signin');
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     var getUsersResponse = await request.post(
@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             headers: {
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ email: req.body }),
+            body: JSON.stringify(req.body),
             json: false
         }
     );

@@ -1,5 +1,6 @@
 .DS_Store
-components/
 bin/
+**/components/redis_messagebus.yaml
+**/components/redis.yaml
 obj/
 node_modules/

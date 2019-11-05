@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import * as http from 'http';
 import * as request from 'request-promise-native';
 
 const daprPort = process.env.DAPR_HTTP_PORT || 3500;

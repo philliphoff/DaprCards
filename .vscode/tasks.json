@@ -205,7 +205,7 @@
                 "run",
                 "--app-id", "dapr-users",
                 "--app-port", "5002",
-                "dotnet", "run"
+                "dotnet", "watch", "run"
             ],
             "problemMatcher": []
         },
@@ -220,7 +220,7 @@
                 "run",
                 "--app-id", "dapr-user-manager",
                 "--app-port", "5004",
-                "dotnet", "run"
+                "dotnet", "watch", "run"
             ],
             "problemMatcher": []
         },

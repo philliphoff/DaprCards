@@ -41,7 +41,7 @@ export default class MyApp extends App<{}, {}, { userId?: string }> {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <UserContext.Provider value={{ userId, logInStart: this.logInStart, logInEnd: this.logInEnd, logOut: this.logOut }}>
+          <UserContext.Provider value={{ userId, isLoggedIn: userId !== undefined, logInStart: this.logInStart, logInEnd: this.logInEnd, logOut: this.logOut }}>
             <Component {...pageProps} />
           </UserContext.Provider>
         </ThemeProvider>
@@ -50,20 +50,26 @@ export default class MyApp extends App<{}, {}, { userId?: string }> {
   }
 
   private readonly logInStart = () => {
-    Router.push('/login');
+      Router.push('/login');
   }
 
   private readonly logInEnd = (userId: string) => {
-    this.setState({
-      userId
-    });
+      localStorage.setItem('user-id', userId);
 
-    Router.back();
+      this.setState(
+          {
+              userId
+          },
+          () => {
+              Router.back();
+          });
   }
 
   private readonly logOut = () => {
-    this.setState({
-      userId: undefined
-    });
+      localStorage.removeItem('user-id');
+
+      this.setState({
+          userId: undefined
+      });
   }
 }

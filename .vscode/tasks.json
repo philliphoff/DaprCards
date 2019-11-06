@@ -44,6 +44,15 @@
             "problemMatcher": []
         },
         {
+            "label": "Cards: Kill",
+            "command": "for p in `lsof -ti:5000`; do kill -9 $p; done; dapr stop --app-id dapr-cards",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
             "label": "CardManager: Build",
             "command": "dotnet",
             "type": "process",
@@ -83,6 +92,15 @@
             ],
             "dependsOn": "CardManager: Build",
             "problemMatcher": []
+        },
+        {
+            "label": "CardManager: Kill",
+            "command": "for p in `lsof -ti:5005`; do kill -9 $p; done; dapr stop --app-id dapr-card-manager",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
         },
         {
             "label": "Common: Build",
@@ -125,6 +143,15 @@
             "problemMatcher": []
         },
         {
+            "label": "Decks: Kill",
+            "command": "for p in `lsof -ti:5001`; do kill -9 $p; done; dapr stop --app-id dapr-decks",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
             "label": "DeckManager: Build",
             "command": "dotnet",
             "type": "process",
@@ -165,6 +192,15 @@
             "problemMatcher": []
         },
         {
+            "label": "DeckManager: Kill",
+            "command": "for p in `lsof -ti:5006`; do kill -9 $p; done; dapr stop --app-id dapr-deck-manager",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
             "label": "Games: Launch",
             "command": "dapr",
             "type": "process",
@@ -178,6 +214,15 @@
                 "dotnet", "run"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "Games: Kill",
+            "command": "for p in `lsof -ti:5003`; do kill -9 $p; done; dapr stop --app-id dapr-games",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
         },
         {
             "label": "GameManager: Launch",
@@ -195,6 +240,15 @@
             "problemMatcher": []
         },
         {
+            "label": "GameManager: Kill",
+            "command": "for p in `lsof -ti:5007`; do kill -9 $p; done; dapr stop --app-id dapr-game-manager",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
             "label": "Users: Launch",
             "command": "dapr",
             "type": "process",
@@ -205,9 +259,18 @@
                 "run",
                 "--app-id", "dapr-users",
                 "--app-port", "5002",
-                "dotnet", "watch", "run"
+                "dotnet", "run"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "Users: Kill",
+            "command": "for p in `lsof -ti:5002`; do kill -9 $p; done; dapr stop --app-id dapr-users",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
         },
         {
             "label": "UserManager: Launch",
@@ -220,9 +283,18 @@
                 "run",
                 "--app-id", "dapr-user-manager",
                 "--app-port", "5004",
-                "dotnet", "watch", "run"
+                "dotnet", "run"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "UserManager: Kill",
+            "command": "for p in `lsof -ti:5004`; do kill -9 $p; done; dapr stop --app-id dapr-user-manager",
+            "type": "shell",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
         },
         {
             "label": "Services: Base",
@@ -242,6 +314,20 @@
             "label": "Services: Launch",
             "dependsOn": ["Common: Build", "Services: Base"],
             "dependsOrder": "sequence",
+            "problemMatcher": []
+        },
+        {
+            "label": "Services: Kill",
+            "dependsOn": [
+                "Cards: Kill",
+                "CardManager: Kill",
+                "Decks: Kill",
+                "DeckManager: Kill",
+                "Games: Kill",
+                "GameManager: Kill",
+                "Users: Kill",
+                "UserManager: Kill"
+            ],
             "problemMatcher": []
         }
     ]

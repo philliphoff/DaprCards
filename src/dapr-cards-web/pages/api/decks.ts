@@ -12,7 +12,7 @@ type UserDetails = {
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const userId = <string>req.headers['X-User-ID'];
+    const userId = <string>req.headers['x-user-id'];
 
     const details = await getAsync<UserDetails>(getUserDetailsUrl(userId));
     const decks = details.decks || [];

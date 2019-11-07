@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using DaprCards.Decks;
 
 namespace DaprCards.UserManager.Controllers
 {
@@ -55,6 +56,10 @@ namespace DaprCards.UserManager.Controllers
 
             await state.SaveStateAsync("users", users);
             await state.SaveStateAsync("emails", emails);
+
+            var deckManager = DeckManagerProxy.CreateProxy();
+
+            await deckManager.CreateRandomDeckAsync(new CreateRandomDeckOptions { UserId = id });
 
             return id;
         }

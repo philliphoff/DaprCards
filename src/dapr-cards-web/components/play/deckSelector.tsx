@@ -1,8 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import PlayContext from './playContext';
 import UserContext from '../userContext';
 import useEffectAsync from '../../useEffectAsync';
 import { getAsync } from '../../util/fetchAsync';
+
+export const Deck =
+    (props: { deckId: string }) => {
+        const { deckId } = props;
+        const { setDeckId } = useContext(PlayContext);
+        const onClick = useCallback(
+            () => {
+                setDeckId(deckId);
+            },
+            [deckId, setDeckId]);
+
+        return (
+            <div onClick={onClick}>
+                { deckId }
+            </div>
+        );
+    };
 
 export const DeckSelector = () => {
     const { userId } = useContext(UserContext);
@@ -18,14 +35,14 @@ export const DeckSelector = () => {
                         'X-User-ID': userId
                     });
                     
-                setDecks(decks);
+                setDecks(deckIds);
             }
         },
-        [userId]);
+        [userId, setDecks]);
 
     return (
         <>
-            { decks.map(deckId => (<div key={deckId}>{deckId}</div>)) }
+            { decks.map(deckId => (<Deck key={deckId} deckId={deckId} />)) }
         </>
     );
 };

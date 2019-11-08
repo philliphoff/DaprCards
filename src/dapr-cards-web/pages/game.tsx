@@ -8,6 +8,7 @@ import DaprAppBar from '../components/daprAppBar';
 import Button from '@material-ui/core/Button';
 import useCallbackAsync from '../util/client/useCallbackAsync';
 import { makeStyles } from '@material-ui/styles';
+import Router from 'next/router';
 
 const useStyles = makeStyles(theme => ({
     scoreboardRoot: {
@@ -97,6 +98,38 @@ export const PlayerScoreboard =
         );
     };
 
+export const CompletedGame =
+    () => {
+        const { userId } = useContext(UserContext);
+        const { details } = useContext(GameContext);
+        const onClick = useCallback(
+            () => {
+                Router.push('/play');
+            },
+            []);
+
+        const getScore = (player: GamePlayer) => (player && player.cards && player.cards.reduce((prev, card) => prev + card.value, 0) || 0);
+
+        const userPlayerScore = getScore(details.players.find(player => player.userId === userId));
+        const computerPlayerScore = getScore(details.players.find(player => player.userId === computerPlayerUserId));
+
+        return (
+            <div>
+                <Typography>This game is done!</Typography>
+                <Typography>
+                    {
+                        userPlayerScore > computerPlayerScore
+                            ? 'You WIN!'
+                            : userPlayerScore < computerPlayerScore
+                                ? 'You LOSE!'
+                                : 'You TIE!'
+                    }
+                    </Typography>
+                <Button color="primary" onClick={onClick} variant="contained">Play Again</Button>
+            </div>
+        );
+    };
+
 export const Game =
     () => {
         const { gameId, userId } = useContext(UserContext);
@@ -126,7 +159,7 @@ export const Game =
                 <PlayerScoreboard />
                 {
                     isGameComplete
-                        ? <Typography>This game is done!</Typography>
+                        ? <CompletedGame />
                         : <CardSelector />
                 }
             </GameContext.Provider>

@@ -3,10 +3,22 @@ import UserContext from '../components/userContext';
 import Typography from '@material-ui/core/Typography';
 import useEffectAsync from '../useEffectAsync';
 import { postAsync } from '../util/fetchAsync';
-import GameContext, { GameCard, GameDetails } from '../components/game/gameContext';
+import GameContext, { GameCard, GameDetails, GamePlayer } from '../components/game/gameContext';
 import DaprAppBar from '../components/daprAppBar';
 import Button from '@material-ui/core/Button';
 import useCallbackAsync from '../util/client/useCallbackAsync';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles(theme => ({
+    scoreboardRoot: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    playerScore: {
+        marginRight: 10
+    }
+}));
 
 export const Card =
     (props: GameCard) => {
@@ -57,6 +69,34 @@ export const CardSelector =
         );
     };
 
+const computerPlayerUserId = '00000000-0000-0000-0000-000000000000';
+
+const PlayerScore =
+    (props: { player: GamePlayer }) => {
+        const classes = useStyles(props);
+
+        return (
+            <div className={classes.playerScore}>
+                <Typography>{props.player.userId !== computerPlayerUserId ? 'You' : 'Computer'}</Typography>
+                <Typography>{props.player.cards.filter(card => card.isPlayed).reduce((prev, card) => prev + card.value, 0)}</Typography>
+            </div>
+        );
+    };
+
+export const PlayerScoreboard =
+    (props) => {
+        const classes = useStyles(props);
+        const { details } = useContext(GameContext);
+
+        return (
+            <div className={classes.scoreboardRoot}>
+                {
+                    details && details.players && details.players.map(player => <PlayerScore player={player} />)
+                }
+            </div>
+        );
+    };
+
 export const Game =
     () => {
         const { gameId, userId } = useContext(UserContext);
@@ -83,6 +123,7 @@ export const Game =
         return (
             <GameContext.Provider value={{ details, selectedCardId, setDetails, setSelectedCardId }}>
                 <DaprAppBar />
+                <PlayerScoreboard />
                 {
                     isGameComplete
                         ? <Typography>This game is done!</Typography>

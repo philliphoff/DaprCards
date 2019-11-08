@@ -3,7 +3,7 @@ import UserContext from '../components/userContext';
 import Typography from '@material-ui/core/Typography';
 import useEffectAsync from '../useEffectAsync';
 import { postAsync } from '../util/fetchAsync';
-import GameContext, { GameCard } from '../components/game/gameContext';
+import GameContext, { GameCard, GameDetails } from '../components/game/gameContext';
 import DaprAppBar from '../components/daprAppBar';
 import Button from '@material-ui/core/Button';
 import useCallbackAsync from '../util/client/useCallbackAsync';
@@ -27,11 +27,11 @@ export const Card =
 export const CardSelector =
     (props: { }) => {
         const { gameId, userId } = useContext(UserContext);
-        const { cards, selectedCardId, setCards, setSelectedCardId } = useContext(GameContext);
+        const { details, selectedCardId, setDetails, setSelectedCardId } = useContext(GameContext);
 
         const onClick = useCallbackAsync(
             async () => {
-                const updatedCards = await postAsync<GameCard[]>(
+                const updatedDetails = await postAsync<GameDetails>(
                     '/api/playCard',
                     { cardId: selectedCardId, gameId },
                     {
@@ -39,14 +39,18 @@ export const CardSelector =
                     });
 
                 setSelectedCardId(undefined);
-                setCards(updatedCards);
+                setDetails(updatedDetails);
             },
             [gameId, selectedCardId, userId]);
+
+        const userPlayer = details && details.players && details.players.find(player => player.userId === userId);
 
         return (
             <>
                 {
-                    cards.map(card => (<Card cardId={card.cardId} isPlayed={card.isPlayed} key={card.cardId} value={card.value} />))
+                    userPlayer
+                        ? userPlayer.cards.map(card => (<Card cardId={card.cardId} isPlayed={card.isPlayed} key={card.cardId} value={card.value} />))
+                        : null
                 }
                 <Button color="primary" disabled={selectedCardId === undefined} onClick={onClick} variant="contained">Play Card</Button>
             </>
@@ -56,28 +60,28 @@ export const CardSelector =
 export const Game =
     () => {
         const { gameId, userId } = useContext(UserContext);
-        const [ cards, setCards ] = useState<GameCard[]>([]);
+        const [ details, setDetails ] = useState<GameDetails>();
         const [ selectedCardId, setSelectedCardId ] = useState<string>();
         
         useEffectAsync(
             async () => {
                 if (gameId) {
-                    const newCards = await postAsync<GameCard[]>(
+                    const details = await postAsync<GameDetails>(
                         '/api/game',
                         gameId,
                         {
                             'X-User-ID': userId
                         });
                         
-                    setCards(newCards);
+                    setDetails(details);
                 }
             },
-            [gameId, setCards, userId]);
+            [gameId, setDetails, userId]);
 
-        const isGameComplete = cards.every(card => card.isPlayed);
+        const isGameComplete = details && details.players && details.players.find(player => player.cards.every(card => card.isPlayed)) !== undefined;
 
         return (
-            <GameContext.Provider value={{ cards, selectedCardId, setCards, setSelectedCardId }}>
+            <GameContext.Provider value={{ details, selectedCardId, setDetails, setSelectedCardId }}>
                 <DaprAppBar />
                 {
                     isGameComplete

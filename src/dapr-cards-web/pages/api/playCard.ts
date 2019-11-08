@@ -36,7 +36,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (userCards) {
         res.setHeader('Content-Type', 'application/json');
         res.statusCode = 200;
-        res.end(JSON.stringify(userCards));
+        res.end(JSON.stringify(details));
     } else {
         res.statusCode = 400;
         res.end();

@@ -51,9 +51,26 @@ namespace DaprCards.Games.Actors
             history.Add(
                 new GameAction
                 {
-                    Description = $"{options.UserId} played the card {options.CardId}.",
+                    Description = $"{options.UserId} played the card {options.CardId} with value {card.Value}.",
                     Timestamp = DateTimeOffset.Now
                 });
+
+            foreach (var computerPlayer in details.Players.Where(player => player.UserId == Guid.Empty.ToString()))
+            {
+                var unplayedCard = computerPlayer.Cards.FirstOrDefault(card => !card.IsPlayed);
+
+                if (unplayedCard != null)
+                {
+                    unplayedCard.IsPlayed = true;
+
+                    history.Add(
+                        new GameAction
+                        {
+                            Description = $"{computerPlayer.UserId} played the card {unplayedCard.CardId} with value {unplayedCard.Value}.",
+                            Timestamp = DateTimeOffset.Now
+                        });
+                }
+            }
 
             details.History = history.ToArray();
 

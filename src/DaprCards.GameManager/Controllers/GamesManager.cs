@@ -71,7 +71,8 @@ namespace DaprCards.GameManager.Controllers
                             {
                                 Cards = cards,
                                 UserId = options.UserId
-                            }
+                            },
+                            CreateComputerPlayer(cards.Length)
                         }
                 });
 
@@ -99,6 +100,20 @@ namespace DaprCards.GameManager.Controllers
             var actorProxy = ActorProxy.Create<IGameActor>(actorId, actorType);
 
             return actorProxy.GetDetailsAsync();
+        }
+
+        private static GamePlayer CreateComputerPlayer(int numberOfCards)
+        {
+            string userId = Guid.Empty.ToString();
+
+            // TODO: Choose an appropriate seed.
+            var random = new Random();
+
+            return new GamePlayer
+            {
+                Cards = Enumerable.Range(0, numberOfCards).Select(_ => new GameCard { CardId = Guid.NewGuid().ToString(), Value = random.Next(1, 100 + 1) }).ToArray(),
+                UserId = Guid.Empty.ToString()
+            };
         }
     }
 }

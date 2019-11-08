@@ -6,16 +6,24 @@ export type GameCard = {
     value: number;
 };
 
+export type GamePlayer = {
+    cards?: GameCard[];
+    userId: string;
+};
+
+export type GameDetails = {
+    players?: GamePlayer[];
+};
+
 type GameContextProps = {
-    cards: GameCard[];
+    details?: GameDetails;
     selectedCardId?: string;
-    setCards: (cards: GameCard[]) => void;
+    setDetails: (details: GameDetails) => void;
     setSelectedCardId: (cardId: string) => void;
 };
 
 const GameContext = createContext<GameContextProps>({
-    cards: [],
-    setCards: undefined,
+    setDetails: undefined,
     setSelectedCardId: undefined
 });
 

@@ -26,6 +26,11 @@ namespace DaprCards.Games
             return proxy.InvokeAsync<GameDetails>(nameof(IGameActor.GetDetailsAsync));
         }
 
+        public Task<GameDetails> PlayCardAsync(PlayCardOptions options)
+        {
+            return proxy.InvokeAsync<GameDetails>(nameof(IGameActor.PlayCardAsync), options);
+        }
+
         public Task SetDetailsAsync(GameDetails details)
         {
             return proxy.InvokeAsync(nameof(IGameActor.SetDetailsAsync), details);

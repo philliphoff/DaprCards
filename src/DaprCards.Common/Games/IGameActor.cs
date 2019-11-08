@@ -7,6 +7,8 @@ namespace DaprCards.Games
     {
         Task<GameDetails> GetDetailsAsync();
 
+        Task<GameDetails> PlayCardAsync(PlayCardOptions options);
+
         Task SetDetailsAsync(GameDetails details);
     }
 }

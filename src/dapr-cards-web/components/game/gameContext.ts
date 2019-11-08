@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 
 type GameContextProps = {
-    gameId?: string;
-    setGameId: (deckId: string) => void;
+    selectedCardId?: string;
+    setSelectedCardId: (cardId: string) => void;
 };
 
 const GameContext = createContext<GameContextProps>({
-    setGameId: undefined
+    setSelectedCardId: undefined
 });
 
 export default GameContext;

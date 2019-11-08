@@ -9,8 +9,27 @@ import Button from '@material-ui/core/Button';
 import useCallbackAsync from '../util/client/useCallbackAsync';
 import { makeStyles } from '@material-ui/styles';
 import Router from 'next/router';
+import classnames from 'classnames';
 
 const useStyles = makeStyles(theme => ({
+    cardsRoot: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    cardRoot: {
+        borderColor: 'black',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        height: 100,
+        marginRight: 10,
+        width: 50
+    },
+    cardPlayed: {
+        borderColor: 'gray'
+    },
+    cardSelected: {
+        borderColor: 'red'
+    },
     scoreboardRoot: {
         display: 'flex',
         flexDirection: 'row',
@@ -23,15 +42,18 @@ const useStyles = makeStyles(theme => ({
 
 export const Card =
     (props: GameCard) => {
-        const { setSelectedCardId } = useContext(GameContext);
+        const styles = useStyles(props);
+        const { selectedCardId, setSelectedCardId } = useContext(GameContext);
         const onClick = useCallback(
             () => {
                 setSelectedCardId(props.cardId);
             },
             [setSelectedCardId]);
 
+        const isSelected = props.cardId === selectedCardId;
+
         return (
-            <div onClick={props.isPlayed ? undefined : onClick}>
+            <div className={classnames(styles.cardRoot, { [styles.cardPlayed]: props.isPlayed, [styles.cardSelected]: isSelected })} onClick={props.isPlayed ? undefined : onClick}>
                 <Typography>{props.value}</Typography>
             </div>
         );
@@ -39,6 +61,7 @@ export const Card =
 
 export const CardSelector =
     (props: { }) => {
+        const classes = useStyles(props);
         const { gameId, userId } = useContext(UserContext);
         const { details, selectedCardId, setDetails, setSelectedCardId } = useContext(GameContext);
 
@@ -60,11 +83,13 @@ export const CardSelector =
 
         return (
             <>
-                {
-                    userPlayer
+                <div className={classes.cardsRoot}>
+                    {
+                        userPlayer
                         ? userPlayer.cards.map(card => (<Card cardId={card.cardId} isPlayed={card.isPlayed} key={card.cardId} value={card.value} />))
                         : null
-                }
+                    }
+                </div>
                 <Button color="primary" disabled={selectedCardId === undefined} onClick={onClick} variant="contained">Play Card</Button>
             </>
         );

@@ -9,6 +9,8 @@ namespace DaprCards.Users
 
         Task AddDeckAsync(string deckId);
 
+        Task AddGameAsync(string gameId);
+
         Task<UserDetails> GetDetailsAsync();
 
         Task SetDetailsAsync(UserDetails details);

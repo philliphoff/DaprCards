@@ -1,7 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 
 export async function getAsync<T>(url: string, headers?: HeadersInit): Promise<T> {
-
     headers = headers || {};
 
     headers['Accept'] = 'application/json';
@@ -16,10 +15,10 @@ export async function getAsync<T>(url: string, headers?: HeadersInit): Promise<T
     return await response.json();
 }
 
-export async function postAsync<T>(url: string, body: any): Promise<T> {
-    const headers = {
-        'Accept': 'application/json'
-    };
+export async function postAsync<T>(url: string, body: any, headers?: HeadersInit): Promise<T> {
+    headers = headers || {};
+
+    headers['Accept'] = 'application/json';
 
     if (body !== undefined) {
         headers['Content-Type'] = 'application/json';

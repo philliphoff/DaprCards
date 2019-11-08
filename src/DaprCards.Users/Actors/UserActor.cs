@@ -46,6 +46,21 @@ namespace DaprCards.Users.Actors
             await this.SetDetailsAsync(details);
         }
 
+        public async Task AddGameAsync(string gameId)
+        {
+            var details = await this.GetDetailsAsync();
+
+            var games = details.Games?.ToList();
+
+            games ??= new List<UserGame>();
+
+            games.Add(new UserGame { GameId = gameId });
+
+            details.Games = games.ToArray();
+
+            await this.SetDetailsAsync(details);
+        }
+
         public Task<UserDetails> GetDetailsAsync()
         {
             return this.StateManager.GetStateAsync<UserDetails>(DetailsStateName);

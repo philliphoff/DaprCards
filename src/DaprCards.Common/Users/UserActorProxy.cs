@@ -31,6 +31,11 @@ namespace DaprCards.Users
             return proxy.InvokeAsync(nameof(IUserActor.AddDeckAsync), deckId);
         }
 
+        public Task AddGameAsync(string gameId)
+        {
+            return proxy.InvokeAsync(nameof(IUserActor.AddGameAsync), gameId);
+        }
+
         public Task<UserDetails> GetDetailsAsync()
         {
             return proxy.InvokeAsync<UserDetails>(nameof(IUserActor.GetDetailsAsync));

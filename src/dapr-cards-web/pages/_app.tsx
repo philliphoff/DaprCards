@@ -7,31 +7,32 @@ import theme from '../theme';
 import UserContext from '../components/userContext';
 import Router from 'next/router';
 
-export default class MyApp extends App<{}, {}, { userId?: string }> {
-  constructor(props) {
-    super(props);
+export default class MyApp extends App<{}, {}, { gameId?: string, userId?: string }> {
+    constructor(props) {
+        super(props);
 
-    this.state = {};
-  }
-
-  componentDidMount() {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentNode.removeChild(jssStyles);
+        this.state = {};
     }
 
-    const userId = localStorage.getItem('user-id');
-    if (userId) {
+    componentDidMount() {
+      // Remove the server-side injected CSS.
+      const jssStyles = document.querySelector('#jss-server-side');
+      if (jssStyles) {
+        jssStyles.parentNode.removeChild(jssStyles);
+      }
+
+      const gameId = localStorage.getItem('game-id');
+      const userId = localStorage.getItem('user-id');
+
       this.setState({
+        gameId,
         userId
       });
     }
-  }
 
   render() {
     const { Component, pageProps } = this.props;
-    const { userId } = this.state;
+    const { gameId, userId } = this.state;
 
     return (
       <React.Fragment>
@@ -41,7 +42,7 @@ export default class MyApp extends App<{}, {}, { userId?: string }> {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <UserContext.Provider value={{ userId, isLoggedIn: userId !== undefined, logInStart: this.logInStart, logInEnd: this.logInEnd, logOut: this.logOut }}>
+          <UserContext.Provider value={{ gameId, userId, isLoggedIn: userId !== undefined, isPlaying: gameId !== undefined, logInStart: this.logInStart, logInEnd: this.logInEnd, logOut: this.logOut, startGame: this.startGame }}>
             <Component {...pageProps} />
           </UserContext.Provider>
         </ThemeProvider>
@@ -51,7 +52,7 @@ export default class MyApp extends App<{}, {}, { userId?: string }> {
 
   private readonly logInStart = () => {
       Router.push('/login');
-  }
+  };
 
   private readonly logInEnd = (userId: string) => {
       localStorage.setItem('user-id', userId);
@@ -63,13 +64,23 @@ export default class MyApp extends App<{}, {}, { userId?: string }> {
           () => {
               Router.back();
           });
-  }
+  };
 
   private readonly logOut = () => {
       localStorage.removeItem('user-id');
 
       this.setState({
+          gameId: undefined,
           userId: undefined
       });
-  }
+  };
+
+  private readonly startGame = (gameId: string) => {
+    localStorage.setItem('game-id', gameId);
+
+    this.setState({
+      gameId
+    },
+    () => Router.push("/game"));
+  };
 }

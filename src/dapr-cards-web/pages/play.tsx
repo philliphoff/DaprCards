@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import PlayContext from '../components/play/playContext';
 import Stepper from '@material-ui/core/Stepper';
 import DeckSelector from '../components/play/deckSelector';
@@ -7,6 +7,8 @@ import StepLabel from '@material-ui/core/StepLabel';
 import DaprAppBar from '../components/daprAppBar';
 import Button from '@material-ui/core/Button';
 import GameConfirmation from '../components/play/gameConfirmation';
+import { postAsync } from '../util/fetchAsync';
+import UserContext from '../components/userContext';
 
 const steps =  [
     {
@@ -19,8 +21,16 @@ const steps =  [
     }
 ];
 
+const startGameHelper =
+    async (userId: string, deckId: string, startGame: (string) => void) => {
+        const gameId = await postAsync<string>('/api/startGame', deckId, { 'x-user-id': userId });
+        
+        startGame(gameId);
+    };
+
 export const Play =
     (props) => {
+        const { userId, startGame } = useContext(UserContext);
         const [ deckId, setDeckId ] = useState();
         const [ step, setStep ] = useState(0);
 
@@ -32,9 +42,13 @@ export const Play =
 
         const onNext = useCallback(
             () => {
-                setStep(step + 1);
+                if (step + 1 < steps.length) {
+                    setStep(step + 1);
+                } else {
+                    startGameHelper(userId, deckId, startGame);
+                }
             },
-            [step, setStep]);
+            [step, setStep, startGame]);
         
         const isBackDisabled = step === 0;
         const isNextDisabled = deckId === undefined;

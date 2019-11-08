@@ -5,8 +5,8 @@ import useEffectAsync from '../../useEffectAsync';
 import { getAsync } from '../../util/fetchAsync';
 
 export const Deck =
-    (props: { deckId: string }) => {
-        const { deckId } = props;
+    (props: { deckId: string, name: string }) => {
+        const { deckId, name } = props;
         const { setDeckId } = useContext(PlayContext);
         const onClick = useCallback(
             () => {
@@ -16,20 +16,25 @@ export const Deck =
 
         return (
             <div onClick={onClick}>
-                { deckId }
+                { name }
             </div>
         );
     };
 
+type UserDeck = {
+    deckId: string;
+    name: string;
+};
+
 export const DeckSelector = () => {
     const { userId } = useContext(UserContext);
     //const { deckId, setDeckId } = useContext(PlayContext);
-    const [ decks, setDecks ] = useState<string[]>([]);
+    const [ decks, setDecks ] = useState<UserDeck[]>([]);
 
     useEffectAsync(
         async () => {
             if (userId) {
-                const deckIds = await getAsync<string[]>(
+                const deckIds = await getAsync<UserDeck[]>(
                     '/api/decks',
                     {
                         'X-User-ID': userId
@@ -42,7 +47,7 @@ export const DeckSelector = () => {
 
     return (
         <>
-            { decks.map(deckId => (<Deck key={deckId} deckId={deckId} />)) }
+            { decks.map(deck => (<Deck key={deck.deckId} deckId={deck.deckId} name={deck.name} />)) }
         </>
     );
 };

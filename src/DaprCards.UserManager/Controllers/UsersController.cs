@@ -59,7 +59,7 @@ namespace DaprCards.UserManager.Controllers
 
             var deckManager = DeckManagerProxy.CreateProxy();
 
-            await deckManager.CreateRandomDeckAsync(new CreateRandomDeckOptions { UserId = id });
+            await deckManager.CreateRandomDeckAsync(new CreateRandomDeckOptions { Name = "My Starter Deck", UserId = id });
 
             return id;
         }

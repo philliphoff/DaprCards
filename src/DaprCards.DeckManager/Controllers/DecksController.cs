@@ -61,6 +61,7 @@ namespace DaprCards.DeckManager.Controllers
             var details = new DeckDetails
             {
                 Cards = new DeckCard[count],
+                Name = options.Name,
                 UserId = options.UserId
             };
 

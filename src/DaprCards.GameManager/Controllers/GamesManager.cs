@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DaprCards.Decks;
 using DaprCards.Users;
+using DaprCards.Cards;
 
 namespace DaprCards.GameManager.Controllers
 {
@@ -43,6 +44,21 @@ namespace DaprCards.GameManager.Controllers
 
             var deckDetails = await deck.GetDetailsAsync();
 
+            var cards = await Task.WhenAll(
+                deckDetails.Cards.Select(
+                    async deckCard =>
+                    {
+                        var card = CardActorProxy.CreateProxy(deckCard.CardId);
+
+                        var cardDetails = await card.GetDetailsAsync();
+
+                        return new GameCard
+                            {
+                                CardId = deckCard.CardId,
+                                Value = cardDetails.Value
+                            };
+                    }));
+
             var game = GameActorProxy.CreateProxy(id);
 
             await game.SetDetailsAsync(
@@ -53,7 +69,7 @@ namespace DaprCards.GameManager.Controllers
                         {
                             new GamePlayer
                             {
-                                Cards = deckDetails.Cards.Select(card => new GameCard { CardId = card.CardId }).ToArray(),
+                                Cards = cards,
                                 UserId = options.UserId
                             }
                         }

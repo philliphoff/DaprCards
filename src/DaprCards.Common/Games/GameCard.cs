@@ -10,5 +10,8 @@ namespace DaprCards.Games
 
         [DataMember(Name = "isPlayed")]
         public bool IsPlayed { get; set; }
+
+        [DataMember(Name = "value", IsRequired = true)]
+        public int Value { get; set; }
     }
 }
